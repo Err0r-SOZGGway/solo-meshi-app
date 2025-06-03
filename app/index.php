@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="../style/style.css">
+
 <?php
 $db = new PDO('sqlite:' . __DIR__ . '/db/recipes.db');
 $recipes = [];

@@ -1,0 +1,5 @@
+.title {
+  body { font-family: sans-serif; margin: 2em; }
+  input, textarea { width: 100%; padding: 0.5em; margin: 1em 0; }
+  .recipe { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; }
+}

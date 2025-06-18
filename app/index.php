@@ -1,9 +1,40 @@
-<link rel="stylesheet" href="../style/style.css">
-
 <?php
-$db = new PDO('sqlite:' . __DIR__ . '/db/recipes.db');
-$recipes = [];
+$dbFile = __DIR__ . '/db/recipes.db';
 
+// ディレクトリがなければ作成（初回用）
+if (!file_exists(__DIR__ . '/db')) {
+    mkdir(__DIR__ . '/db', 0777, true);
+}
+
+// SQLiteに接続
+$db = new PDO('sqlite:' . $dbFile);
+$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// テーブルがなければ作成（初回用）
+$db->exec("
+    CREATE TABLE IF NOT EXISTS recipes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        title TEXT NOT NULL,
+        ingredients TEXT NOT NULL,
+        steps TEXT NOT NULL,
+        cooking_time TEXT
+    );
+");
+
+// サンプルレシピがなければ1件追加
+$count = $db->query("SELECT COUNT(*) FROM recipes")->fetchColumn();
+if ($count == 0) {
+    $stmt = $db->prepare("INSERT INTO recipes (title, ingredients, steps, cooking_time) VALUES (?, ?, ?, ?)");
+    $stmt->execute([
+        '卵チャーハン',
+        'ごはん,卵,ねぎ,しょうゆ,ごま油',
+        "1. フライパンにごま油を熱する。\n2. 卵を炒めて半熟になったらごはんを加える。\n3. ねぎを加えて炒め、しょうゆで味付けする。",
+        '10分'
+    ]);
+}
+
+// 検索処理
+$recipes = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = $_POST['ingredients'] ?? '';
     $inputIngredients = array_map('trim', explode(',', $input));

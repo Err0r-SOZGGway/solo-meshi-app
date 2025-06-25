@@ -62,11 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <title>ソロメシ提案くん</title>
-  <style>
-    body { font-family: sans-serif; margin: 2em; }
-    input, textarea { width: 100%; padding: 0.5em; margin: 1em 0; }
-    .recipe { border: 1px solid #ccc; padding: 1em; margin-bottom: 1em; }
-  </style>
+  <link rel="stylesheet" href="style/style.css" type="text/css">
 </head>
 <body>
   <h1>ソロメシ提案くん</h1>

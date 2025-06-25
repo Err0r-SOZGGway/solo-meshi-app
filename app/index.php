@@ -1,4 +1,10 @@
 <?php
+session_start();
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: login.php');
+    exit;
+}
+
 $dbFile = __DIR__ . '/db/recipes.db';
 
 // ディレクトリがなければ作成（初回用）
@@ -26,10 +32,10 @@ $count = $db->query("SELECT COUNT(*) FROM recipes")->fetchColumn();
 if ($count == 0) {
     $stmt = $db->prepare("INSERT INTO recipes (title, ingredients, steps, cooking_time) VALUES (?, ?, ?, ?)");
     $stmt->execute([
-        '卵チャーハン',
-        'ごはん,卵,ねぎ,しょうゆ,ごま油',
-        "1. フライパンにごま油を熱する。\n2. 卵を炒めて半熟になったらごはんを加える。\n3. ねぎを加えて炒め、しょうゆで味付けする。",
-        '10分'
+      '豪華な卵かけご飯',
+      'ごはん,卵,しょうゆ,味の素,ごま油',
+      '1. ご飯を茶碗に盛り付ける。\n2. 卵を卵黄と黄身で分ける。\n3. ご飯に窪みを作って卵黄を入れる。\n4. 白身を周りにかける。\n5. 味の素を多めに入れる。ごま油を少し入れる。\n6. 混ぜる。',
+      '5分'
     ]);
 }
 
@@ -83,5 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
     <p>該当するレシピが見つかりませんでした。</p>
   <?php endif; ?>
+  <p><a href="logout.php">ログアウト</a></p>
 </body>
 </html>
